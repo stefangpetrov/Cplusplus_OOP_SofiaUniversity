@@ -13,7 +13,7 @@ ChallengeArray::ChallengeArray(const ChallengeArray& other)
     {
         this->capacity = other.capacity;
         this->size = other.size;
-        this->challenges = new Challenge[size];
+        this->challenges = new Challenge[capacity];
 
         for (int i = 0; i < size; i++)
         {
@@ -30,7 +30,7 @@ const ChallengeArray& ChallengeArray::operator=(const ChallengeArray& other)
         delete[] this->challenges;
         this->capacity = other.capacity;
         this->size = other.size;
-        this->challenges = new Challenge[size];
+        this->challenges = new Challenge[capacity];
 
         for (int i = 0; i < size; i++)
         {
@@ -43,7 +43,8 @@ const ChallengeArray& ChallengeArray::operator=(const ChallengeArray& other)
 
 ChallengeArray::~ChallengeArray()
 {
-    delete[] challenges;
+    if(challenges != nullptr)
+        delete[] challenges;
 }
 
 bool ChallengeArray::contains(const char* challengeName)

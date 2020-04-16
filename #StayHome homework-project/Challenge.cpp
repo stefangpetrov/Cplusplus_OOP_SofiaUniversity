@@ -8,7 +8,10 @@ Challenge::Challenge(const char* _name)
     this->numberOfChallenges = 1;
 
     strcpy(status, "new");
-    strcpy(this->name, _name);
+    if(name != nullptr)
+        strcpy(this->name, _name);
+    else
+        strcpy(this->name, "");
 }
 
 void Challenge::ChangeRating(double newRating)

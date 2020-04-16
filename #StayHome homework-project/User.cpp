@@ -57,7 +57,8 @@ User& User::operator=(const User& other)
 
 User::~User()
 {
-    delete[] name;
+    if(name != nullptr)
+        delete[] name;
 }
 
 const char* User::getName() const
@@ -91,6 +92,7 @@ void User::addUnfinishedChallenge(const char* challengeTag)
     {
         this->unfinishedChals.add(challengeTag);
     }
+    this->unfinishedChals.print();
     return;
 }
 

@@ -119,6 +119,7 @@ void CommandHandler::handleCommand(const char* command)
 void CommandHandler::registration(const char* userInfo)
 {
     allUsers.add(userInfo);
+    
 }
 
 void CommandHandler::challenge(const char* challengeInfo)
@@ -200,13 +201,15 @@ void CommandHandler::challenge(const char* challengeInfo)
                                 if (strcmp(allUsers[i].getName(), tok) == 0)
                                 {
                                     allUsers[i].addUnfinishedChallenge(challengeTag);
+                                    
                                 }
                             }
                             tok = strtok(NULL, " ");
                         }
 
                         allChallenges.add(challengeTag);
-                        cout << "tuk";
+                        allChallenges.print();
+                        
                     }
                     else
                     {

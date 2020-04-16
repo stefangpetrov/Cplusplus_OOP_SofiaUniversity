@@ -2,7 +2,7 @@
 
 AllUsers::AllUsers()
 {
-    capacity = 4;
+    capacity = 2;
     size = 0;
     users = new User[capacity];
 }
@@ -13,7 +13,7 @@ AllUsers::AllUsers(const AllUsers& other)
     {
         this->capacity = other.capacity;
         this->size = other.size;
-        this->users = new User[size];
+        this->users = new User[capacity];
 
         for (int i = 0; i < size; i++)
         {
@@ -30,7 +30,7 @@ const AllUsers& AllUsers::operator=(const AllUsers& other)
         delete[] this->users;
         this->capacity = other.capacity;
         this->size = other.size;
-        this->users = new User[size];
+        this->users = new User[capacity];
 
         for (int i = 0; i < size; i++)
         {
@@ -43,7 +43,8 @@ const AllUsers& AllUsers::operator=(const AllUsers& other)
 
 AllUsers::~AllUsers()
 {
-    delete[] users;
+    if(users != nullptr)
+        delete[] users;
 }
 
 User& AllUsers::operator[](int i)
