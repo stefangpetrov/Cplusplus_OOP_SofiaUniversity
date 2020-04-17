@@ -25,9 +25,6 @@ public:
 
     bool contains(const char* name);
     
-
-    User& getByName(const char* userName);
-    
     
 };
 

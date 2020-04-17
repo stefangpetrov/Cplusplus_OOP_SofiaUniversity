@@ -2,17 +2,16 @@
 #include<iostream>
 #include <cstring>
 #include <cmath>
+#include <fstream>
 #pragma warning(disable:4996)
 using namespace std;
 
 class Challenge
 {
     char name[32];
-    char status[20];
-    int numberOfRaters;
+    unsigned short numberOfRaters;
     unsigned short numberOfChallenges;
-    double sumRate;
-    double rating;
+    float sumRate;
 public:
     Challenge(const char* _name = "");
     
@@ -29,12 +28,8 @@ public:
     {
         return this->numberOfChallenges;
     }
-    void changeStatus(const char* newStatus)
-    {
-        strcpy(this->status, newStatus);
-    }
 
-    void ChangeRating(double newRating);
+    void ChangeRating(float newRating);
     
     void print();
     

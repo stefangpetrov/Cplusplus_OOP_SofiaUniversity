@@ -193,15 +193,5 @@ bool AllUsers::contains(const char* name)
     return false;
 }
 
-User& AllUsers::getByName(const char* userName)
-{
-    for (int i = 0; i < size; i++)
-    {
-        if (strcmp(users[i].getName(), userName) == 0)
-        {
-            return users[i];
-        }
-    }
-}
 
 

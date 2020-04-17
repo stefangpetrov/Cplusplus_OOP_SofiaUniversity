@@ -105,7 +105,7 @@ void CommandHandler::handleCommand(const char* command)
     }
     else if (isLoad(_command))
     {
-        //load(_command + 5);
+        load(_command + 5);
     }
     else
     {
@@ -124,8 +124,6 @@ void CommandHandler::registration(const char* userInfo)
 
 void CommandHandler::challenge(const char* challengeInfo)
 {
-    allUsers.print();
-
     char* tokArray = new char[strlen(challengeInfo) + 1];
     strcpy(tokArray, challengeInfo);
 
@@ -186,10 +184,10 @@ void CommandHandler::challenge(const char* challengeInfo)
                         delete[] tokArray;
                         tokArray = new char[strlen(challengeInfo) + 1];
                         strcpy(tokArray, challengeInfo);
-                        cout << tokArray << endl;
+                        
 
                         tok = strtok(tokArray, " ");
-                        //cout<<tok<<endl;
+                        
                         tok = strtok(NULL, " ");
                         tok = strtok(NULL, " ");
 
@@ -202,13 +200,14 @@ void CommandHandler::challenge(const char* challengeInfo)
                                 {
                                     allUsers[i].addUnfinishedChallenge(challengeTag);
                                     
+                                    
                                 }
                             }
                             tok = strtok(NULL, " ");
                         }
 
                         allChallenges.add(challengeTag);
-                        allChallenges.print();
+                        
                         
                     }
                     else
@@ -244,7 +243,7 @@ void CommandHandler::finish(const char* finishInfo)
     char* tag = nullptr;
     char* userId = nullptr;
     char* rateToChar = nullptr;
-    double rate;
+    float rate;
     int userID = 0;
 
     if (tok != NULL)
@@ -279,7 +278,7 @@ void CommandHandler::finish(const char* finishInfo)
                 return;
             }
             int currentDigit = userId[i] - '0';
-            userID += currentDigit * pow(10, length - i);
+            userID += currentDigit * pow(10, length - i - 1);
         }
 
 
@@ -291,22 +290,29 @@ void CommandHandler::finish(const char* finishInfo)
 
 
             rate = strtod(rateToChar, NULL);
-
-            for (size_t i = 0; i < allUsers.getSize(); i++)
+            if (rate >= -5 && rate <= 10)
             {
-                if (allUsers[i].getId() == userID)
+                for (size_t i = 0; i < allUsers.getSize(); i++)
                 {
-                    allUsers[i].removeChallenge(tag);
+                    if (allUsers[i].getId() == userID)
+                    {
+                        allUsers[i].removeChallenge(tag);
+                    }
+                }
+
+                for (size_t i = 0; i < allChallenges.getSize(); i++)
+                {
+                    if (strcmp(allChallenges[i].getName(), tag) == 0)
+                    {
+                        allChallenges[i].ChangeRating(rate);
+                    }
                 }
             }
-
-            for (size_t i = 0; i < allChallenges.getSize(); i++)
+            else
             {
-                if (strcmp(allChallenges[i].getName(), tag) == 0)
-                {
-                    allChallenges[i].ChangeRating(rate);
-                }
+                cout << "Try givin the challenge a valid rating. Hint [-5, 10]." << endl;
             }
+            
             
         }
     }
@@ -383,3 +389,115 @@ void CommandHandler::listBy(const char* listInfo)
         cout << "Invalid command!";
     }
 }
+
+void CommandHandler::load(const char* fileInfo)
+{
+    fstream file;
+
+    char* fileToChar = nullptr;
+    fileToChar = new char[strlen(fileInfo) + 1];
+    strcpy(fileToChar, fileInfo);
+
+    char* tok = strtok(fileToChar, ".");
+    char* ext = nullptr;
+    char* fileN = nullptr;
+
+    if (tok != NULL)
+    {
+        fileN = new char[strlen(tok) + 1];
+        strcpy(fileN, tok);
+    }
+
+    tok = strtok(NULL, " ");
+
+    if (tok != NULL)
+    {
+        ext = new char[strlen(tok) + 1];
+        strcpy(ext, tok);
+    }
+    if (strcmp(fileN, "users") != 0)
+    {
+        cout << "Wrong file name!" << endl;
+        return;
+    }
+
+    if (strcmp(ext, "txt") == 0)
+    {
+        file.open("users.txt");
+
+
+
+        char c;
+        while (!file.eof())
+        {
+
+            char* userInfo = new char[8];
+            int allocated = 8;
+            int index = 0;
+            while (file.get(c))
+            {
+                if ('\n' == c || '\r' == c)
+                {
+                    break;
+                }
+                else
+                {
+                    if (index == allocated)
+                    {
+                        allocated *= 2;
+                        char* buffer = new char[allocated];
+
+                        for (int i = 0; i < index; i++)
+                        {
+                            buffer[i] = userInfo[i];
+                        }
+                        delete[] userInfo;
+                        userInfo = buffer;
+
+                    }
+                    userInfo[index] = c;
+                    index++;
+                }
+
+                
+            }
+
+            userInfo[index] = '\0';
+
+            allUsers.add(userInfo);
+
+            delete[] userInfo;
+        }
+        file.close();
+    }
+    else if (strcmp(ext, "bin") == 0)
+    {
+        //file.open("challenges.bin");
+
+        /* FOR BINARY FILES
+        streampos size;
+        char * memblock;
+
+        ifstream file ("example.bin", ios::in|ios::binary|ios::ate);
+        if (file.is_open())
+        {
+            size = file.tellg();
+            memblock = new char [size];
+            file.seekg (0, ios::beg);
+            file.read (memblock, size);
+            file.close();
+
+            cout << "the entire file content is in memory";
+
+            delete[] memblock;
+        }
+        else cout << "Unable to open file";
+        */
+    }
+    else
+    {
+        cout << "Wrong ext" << endl;
+    }
+
+}
+

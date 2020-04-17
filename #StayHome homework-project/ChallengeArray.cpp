@@ -64,21 +64,11 @@ void ChallengeArray::add(const char* challengeName)
 {
     if (this->contains(challengeName))
     {
-        cout << "tuk" << endl;
         for (int i = 0; i < size; i++)
         {
             if (strcmp(challenges[i].getName(), challengeName) == 0)
             {
                 challenges[i].increaseChallenges();
-
-                if (challenges[i].getNumberOfChallenges() >= 2 && challenges[i].getNumberOfChallenges() <= 10)
-                {
-                    challenges[i].changeStatus("quite recently");
-                }
-                else if (challenges[i].getNumberOfChallenges() >= 11)
-                {
-                    challenges[i].changeStatus("old");
-                }
             }
         }
     }

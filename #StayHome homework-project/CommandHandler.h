@@ -32,9 +32,7 @@ public:
     void listBy(const char* listInfo);
     
 
-    void load()
-    {
-
-    }
+    void load(const char* fileInfo);
+    
 };
 

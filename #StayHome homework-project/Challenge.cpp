@@ -2,29 +2,38 @@
 
 Challenge::Challenge(const char* _name)
 {
-    this->rating = 0;
     this->numberOfRaters = 0;
     this->sumRate = 0.00;
     this->numberOfChallenges = 1;
 
-    strcpy(status, "new");
+    
     if(name != nullptr)
         strcpy(this->name, _name);
     else
         strcpy(this->name, "");
 }
 
-void Challenge::ChangeRating(double newRating)
+void Challenge::ChangeRating(float newRating)
 {
     this->numberOfRaters++;
-    sumRate += newRating;
-
-    rating = sumRate / numberOfRaters;
+    this->sumRate += newRating;
 }
 
 void Challenge::print()
 {
     cout << "name: " << this->name << endl;
-    cout << "status: " << this->status << endl;
-    cout << "rating" << this->rating << endl;
+    cout << "status: ";
+    if (numberOfChallenges < 2)
+    {
+        cout << "new" << endl;
+    }
+    else if (numberOfChallenges > 2 && numberOfChallenges < 10)
+    {
+        cout << "quite recently" << endl;
+    }
+    else
+    {
+        cout << "old" << endl;
+    }
+    cout << "rating: " << (double)(this->sumRate / this->numberOfRaters);
 }

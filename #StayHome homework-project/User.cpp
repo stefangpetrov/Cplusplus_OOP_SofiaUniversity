@@ -79,6 +79,11 @@ void User::print()
         cout << "Unknown" << endl;
     }
     cout << email << endl;
+
+    for (size_t i = 0; i < unfinishedChals.getSize(); i++)
+    {
+        unfinishedChals[i].print();
+    }
 }
 
 const char* User::getEmail() const
@@ -92,7 +97,7 @@ void User::addUnfinishedChallenge(const char* challengeTag)
     {
         this->unfinishedChals.add(challengeTag);
     }
-    this->unfinishedChals.print();
+    
     return;
 }
 
