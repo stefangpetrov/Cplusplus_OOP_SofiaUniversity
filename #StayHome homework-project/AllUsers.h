@@ -24,7 +24,7 @@ public:
     
 
     bool contains(const char* name);
-    
+    bool containsID(const int ID);
     
 };
 

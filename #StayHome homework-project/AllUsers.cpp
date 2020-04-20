@@ -193,5 +193,18 @@ bool AllUsers::contains(const char* name)
     return false;
 }
 
+bool AllUsers::containsID(const int ID)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (users[i].getId(), ID == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+    return false;
+}
+
 
 

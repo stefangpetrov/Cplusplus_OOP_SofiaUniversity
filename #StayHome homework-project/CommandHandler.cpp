@@ -141,6 +141,7 @@ void CommandHandler::challenge(const char* challengeInfo)
     //
     if (challengerName != nullptr)
     {
+        
         if (allUsers.contains(challengerName))
         {
             tok = strtok(NULL, " ");
@@ -154,9 +155,9 @@ void CommandHandler::challenge(const char* challengeInfo)
 
             if (challengeTag != nullptr)
             {
-                if (challengeTag[0] != '#' && (strlen(challengeTag) < 2 || strlen(challengeTag) > 31))
+                if (challengeTag[0] != '#' || (strlen(challengeTag) < 2 || strlen(challengeTag) > 31))
                 {
-                    cout << "Challenge must start with # and be 31 symbols long!";
+                    cout << "Challenge must start with # and be 31 symbols long!" << endl;
                     return;
                 }
                 else
@@ -219,12 +220,17 @@ void CommandHandler::challenge(const char* challengeInfo)
 
                 }
             }
+            
         }
         else
         {
             cout << "No in";
             return;
         }
+    }
+    else
+    {
+        cout << "blabal" << endl;
     }
 
     if (challengerName != nullptr)
@@ -257,6 +263,16 @@ void CommandHandler::finish(const char* finishInfo)
         return;
     }
 
+    if (!allUsers.containsID(userID))
+    {
+        cout << "No such user registered" << endl;
+        return;
+    }
+    if (!allChallenges.contains(tag))
+    {
+        cout << "No such challenge" << endl;
+        return;
+    }
     tok = strtok(NULL, " ");
     if (tok != NULL)
     {
@@ -355,7 +371,7 @@ void CommandHandler::profileInfo(const char* name)
     }
     else
     {
-        cout << "No such user!";
+        cout << "No such user!" << endl;
     }
 }
 
@@ -399,7 +415,7 @@ void CommandHandler::listBy(const char* listInfo)
     }
     else
     {
-        cout << "Invalid command!";
+        cout << "Invalid command!" << endl;
     }
 }
 
@@ -536,15 +552,15 @@ void CommandHandler::load(const char* fileInfo)
 
                     challengeInfo[index] = '\0';
 
-                    cout << challengeInfo << endl;
-                    this->challenge(challengeInfo);
+                    if(challengeInfo[0] != '\0')
+                        this->challenge(challengeInfo);
 
                     delete[] challengeInfo;
                 }
             }
             else
             {
-                cout << "file is not correct";
+                cout << "file is not correct" << endl;
                 return;
             }
 
