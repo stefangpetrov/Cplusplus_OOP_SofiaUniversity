@@ -251,7 +251,11 @@ void CommandHandler::finish(const char* finishInfo)
         tag = new char[strlen(tok) + 1];
         strcpy(tag, tok);
     }
-
+    else
+    {
+        cout << "Please write a valid tag!";
+        return;
+    }
 
     tok = strtok(NULL, " ");
     if (tok != NULL)
@@ -286,10 +290,10 @@ void CommandHandler::finish(const char* finishInfo)
         if (tok != NULL)
         {
             rateToChar = new char[strlen(tok) + 1];
+            
             strcpy(rateToChar, tok);
-
-
             rate = strtod(rateToChar, NULL);
+
             if (rate >= -5 && rate <= 10)
             {
                 for (size_t i = 0; i < allUsers.getSize(); i++)
@@ -315,6 +319,15 @@ void CommandHandler::finish(const char* finishInfo)
             
             
         }
+        else
+        {
+            cout << "Write proper rate." << endl;
+        }
+    }
+    else
+    {
+        cout << "Write a proper ID!" << endl;
+        return;
     }
 
     if (userId != nullptr)
@@ -415,88 +428,130 @@ void CommandHandler::load(const char* fileInfo)
         ext = new char[strlen(tok) + 1];
         strcpy(ext, tok);
     }
-    if (strcmp(fileN, "users") != 0)
+
+    if (strcmp(fileN, "users") == 0)
     {
-        cout << "Wrong file name!" << endl;
-        return;
+        if (strcmp(ext, "txt") == 0)
+        {
+            file.open("users.txt");
+
+            char c;
+            while (!file.eof())
+            {
+
+                char* userInfo = new char[8];
+                int allocated = 8;
+                int index = 0;
+                while (file.get(c))
+                {
+                    if ('\n' == c || '\r' == c)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (index == allocated)
+                        {
+                            allocated *= 2;
+                            char* buffer = new char[allocated];
+
+                            for (int i = 0; i < index; i++)
+                            {
+                                buffer[i] = userInfo[i];
+                            }
+                            delete[] userInfo;
+                            userInfo = buffer;
+
+                        }
+                        userInfo[index] = c;
+                        index++;
+                    }
+                }
+
+                userInfo[index] = '\0';
+
+                cout << userInfo << endl;
+                allUsers.add(userInfo);
+
+                delete[] userInfo;
+            }
+            file.close();
+        }
+        else
+        {
+            cout << "Wrong ext" << endl;
+            return;
+        }
     }
 
-    if (strcmp(ext, "txt") == 0)
+    else if (strcmp(fileN, "challenges") == 0)
     {
-        file.open("users.txt");
-
-
-
-        char c;
-        while (!file.eof())
+        if (strcmp(ext, "bin") == 0)
         {
+            ifstream fileToOpen("challenges.bin", ios::binary);
+            char value;
 
-            char* userInfo = new char[8];
-            int allocated = 8;
-            int index = 0;
-            while (file.get(c))
+            if (fileToOpen.is_open())
             {
-                if ('\n' == c || '\r' == c)
+                while (!fileToOpen.eof())
                 {
-                    break;
-                }
-                else
-                {
-                    if (index == allocated)
+                    char* challengeInfo = new char[8];
+                    int allocated = 8;
+                    int index = 0;
+                    while (fileToOpen.read((char*)&value, sizeof(char)))
                     {
-                        allocated *= 2;
-                        char* buffer = new char[allocated];
-
-                        for (int i = 0; i < index; i++)
+                        if ('\n' == value || '\r' == value)
                         {
-                            buffer[i] = userInfo[i];
+                            break;
                         }
-                        delete[] userInfo;
-                        userInfo = buffer;
+                        else
+                        {
+                            if (index == allocated)
+                            {
+                                allocated *= 2;
+                                char* buffer = new char[allocated];
+
+                                for (int i = 0; i < index; i++)
+                                {
+                                    buffer[i] = challengeInfo[i];
+                                }
+                                delete[] challengeInfo;
+                                challengeInfo = buffer;
+
+                            }
+                            challengeInfo[index] = value;
+                            index++;
+                        }
+
 
                     }
-                    userInfo[index] = c;
-                    index++;
-                }
 
-                
+                    challengeInfo[index] = '\0';
+
+                    cout << challengeInfo << endl;
+                    this->challenge(challengeInfo);
+
+                    delete[] challengeInfo;
+                }
+            }
+            else
+            {
+                cout << "file is not correct";
+                return;
             }
 
-            userInfo[index] = '\0';
-
-            allUsers.add(userInfo);
-
-            delete[] userInfo;
+            fileToOpen.close();
         }
-        file.close();
-    }
-    else if (strcmp(ext, "bin") == 0)
-    {
-        //file.open("challenges.bin");
-
-        /* FOR BINARY FILES
-        streampos size;
-        char * memblock;
-
-        ifstream file ("example.bin", ios::in|ios::binary|ios::ate);
-        if (file.is_open())
+        else
         {
-            size = file.tellg();
-            memblock = new char [size];
-            file.seekg (0, ios::beg);
-            file.read (memblock, size);
-            file.close();
-
-            cout << "the entire file content is in memory";
-
-            delete[] memblock;
+            cout << "Wrong ext" << endl;
+            return;
         }
-        else cout << "Unable to open file";
-        */
+
     }
     else
     {
-        cout << "Wrong ext" << endl;
+        cout << "Wrong file name!" << endl;
     }
 
 }

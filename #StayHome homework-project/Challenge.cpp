@@ -35,5 +35,8 @@ void Challenge::print()
     {
         cout << "old" << endl;
     }
-    cout << "rating: " << (double)(this->sumRate / this->numberOfRaters);
+    if (this->sumRate != 0)
+        cout << "rating: " << (double)(this->sumRate / this->numberOfRaters) << endl;
+    else
+        cout << "rating: " << 0 << endl;
 }
