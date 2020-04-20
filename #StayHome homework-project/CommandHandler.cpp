@@ -85,27 +85,27 @@ void CommandHandler::handleCommand(const char* command)
 
     if (isRegistration(_command))
     {
-        registration(_command + 13);
+        registration(_command + strlen("registration "));
     }
     else if (isChallenge(_command))
     {
-        challenge(_command + 10);
+        challenge(_command + strlen("challenge "));
     }
     else if (isFinish(_command))
     {
-        finish(_command + 7);
+        finish(_command + strlen("finish "));
     }
     else if (isProfileInfo(_command))
     {
-        profileInfo(_command + 13);
+        profileInfo(_command + strlen("profile_info "));
     }
     else if (isListBy(_command))
     {
-        listBy(_command + 8);
+        listBy(_command + strlen("list_by "));
     }
     else if (isLoad(_command))
     {
-        load(_command + 5);
+        load(_command + strlen("load "));
     }
     else
     {
@@ -434,48 +434,56 @@ void CommandHandler::load(const char* fileInfo)
         if (strcmp(ext, "txt") == 0)
         {
             file.open("users.txt");
-
-            char c;
-            while (!file.eof())
+            if (file.is_open())
             {
-
-                char* userInfo = new char[8];
-                int allocated = 8;
-                int index = 0;
-                while (file.get(c))
+                char c;
+                while (!file.eof())
                 {
-                    if ('\n' == c || '\r' == c)
+
+                    char* userInfo = new char[8];
+                    int allocated = 8;
+                    int index = 0;
+                    while (file.get(c))
                     {
-                        break;
-                    }
-                    else
-                    {
-                        if (index == allocated)
+                        if ('\n' == c || '\r' == c)
                         {
-                            allocated *= 2;
-                            char* buffer = new char[allocated];
-
-                            for (int i = 0; i < index; i++)
-                            {
-                                buffer[i] = userInfo[i];
-                            }
-                            delete[] userInfo;
-                            userInfo = buffer;
-
+                            break;
                         }
-                        userInfo[index] = c;
-                        index++;
+                        else
+                        {
+                            if (index == allocated)
+                            {
+                                allocated *= 2;
+                                char* buffer = new char[allocated];
+
+                                for (int i = 0; i < index; i++)
+                                {
+                                    buffer[i] = userInfo[i];
+                                }
+                                delete[] userInfo;
+                                userInfo = buffer;
+
+                            }
+                            userInfo[index] = c;
+                            index++;
+                        }
                     }
+
+                    userInfo[index] = '\0';
+
+                    cout << userInfo << endl;
+                    allUsers.add(userInfo);
+
+                    delete[] userInfo;
                 }
-
-                userInfo[index] = '\0';
-
-                cout << userInfo << endl;
-                allUsers.add(userInfo);
-
-                delete[] userInfo;
+                file.close();
             }
-            file.close();
+            else
+            {
+                cout << "file could not open!" << endl;
+                return;
+            }
+            
         }
         else
         {
