@@ -16,10 +16,8 @@ public:
     User& operator = (const User& other);
     ~User();
     
-    ChallengeArray getUnfinChals()
-    {
-        return unfinishedChals;
-    }
+    ChallengeArray getUnfinChals();
+    
     const char* getName() const;
     void print();
     

@@ -6,6 +6,9 @@ class AllUsers
     User* users;
     int size;
     int capacity;
+    void copy(const int _size, const int _capacity, const User* _users);
+    void resize();
+
 
 public:
     AllUsers();

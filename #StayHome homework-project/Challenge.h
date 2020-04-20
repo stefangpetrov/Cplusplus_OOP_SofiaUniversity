@@ -1,9 +1,12 @@
 #pragma once
+#pragma warning(disable:4996)
+
 #include<iostream>
+#include <fstream>
 #include <cstring>
 #include <cmath>
-#include <fstream>
-#pragma warning(disable:4996)
+
+
 using namespace std;
 
 class Challenge
@@ -16,18 +19,12 @@ public:
     Challenge(const char* _name = "");
     
 
-    const char* getName() const
-    {
-        return this->name;
-    }
-    void increaseChallenges()
-    {
-        this->numberOfChallenges++;
-    }
-    int getNumberOfChallenges()
-    {
-        return this->numberOfChallenges;
-    }
+    const char* getName() const;
+    
+    void increaseChallenges();
+    
+    int getNumberOfChallenges();
+    
 
     void ChangeRating(float newRating);
     

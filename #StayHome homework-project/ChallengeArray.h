@@ -6,6 +6,7 @@ class ChallengeArray
     Challenge* challenges;
     int size;
     int capacity;
+    void copy(int _size, int _capacity, Challenge* _challenges);
 
 public:
     ChallengeArray();

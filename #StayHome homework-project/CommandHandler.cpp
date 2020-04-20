@@ -1,109 +1,32 @@
 #include "CommandHandler.h"
-
-bool CommandHandler::isChallenge(const char* command)
-{
-    char arr[20] = "challenge ";
-    for (int i = 0; i < strlen("challenge "); i++)
-    {
-        if (command[i] != arr[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool CommandHandler::isFinish(const char* command)
-{
-    char arr[10] = "finish ";
-    for (int i = 0; i < strlen("finish "); i++)
-    {
-        if (command[i] != arr[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool CommandHandler::isProfileInfo(const char* command)
-{
-    char arr[20] = "profile_info ";
-    for (int i = 0; i < strlen("profile_info "); i++)
-    {
-        if (command[i] != arr[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool CommandHandler::isListBy(const char* command)
-{
-    char arr[20] = "list_by ";
-    for (int i = 0; i < strlen("list_by "); i++)
-    {
-        if (command[i] != arr[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool CommandHandler::isLoad(const char* command)
-{
-    char arr[20] = "load ";
-    for (int i = 0; i < strlen("load "); i++)
-    {
-        if (command[i] != arr[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool CommandHandler::isRegistration(const char* command)
-{
-    char arr[20] = "registration ";
-    for (int i = 0; i < strlen("registration "); i++)
-    {
-        if (command[i] != arr[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
+#include "CommandChecker.h"
 
 void CommandHandler::handleCommand(const char* command)
 {
     char* _command = new char[strlen(command) + 1];
     strcpy(_command, command);
 
-    if (isRegistration(_command))
+    if (checker::isRegistration(_command))
     {
         registration(_command + strlen("registration "));
     }
-    else if (isChallenge(_command))
+    else if (checker::isChallenge(_command))
     {
         challenge(_command + strlen("challenge "));
     }
-    else if (isFinish(_command))
+    else if (checker::isFinish(_command))
     {
         finish(_command + strlen("finish "));
     }
-    else if (isProfileInfo(_command))
+    else if (checker::isProfileInfo(_command))
     {
         profileInfo(_command + strlen("profile_info "));
     }
-    else if (isListBy(_command))
+    else if (checker::isListBy(_command))
     {
         listBy(_command + strlen("list_by "));
     }
-    else if (isLoad(_command))
+    else if (checker::isLoad(_command))
     {
         load(_command + strlen("load "));
     }
@@ -224,13 +147,13 @@ void CommandHandler::challenge(const char* challengeInfo)
         }
         else
         {
-            cout << "No in";
+            cout << "No such user"<<endl;
             return;
         }
     }
     else
     {
-        cout << "blabal" << endl;
+        cout << "Enter a user" << endl;
     }
 
     if (challengerName != nullptr)

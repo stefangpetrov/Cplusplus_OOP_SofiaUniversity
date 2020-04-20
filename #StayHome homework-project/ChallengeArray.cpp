@@ -1,5 +1,17 @@
 #include "ChallengeArray.h"
 
+void ChallengeArray::copy(int _size, int _capacity, Challenge* _challenges)
+{
+    this->capacity = _capacity;
+    this->size = _size;
+    this->challenges = new Challenge[capacity];
+
+    for (int i = 0; i < size; i++)
+    {
+        this->challenges[i] = _challenges[i];
+    }
+}
+
 ChallengeArray::ChallengeArray()
 {
     capacity = 4;
@@ -11,15 +23,7 @@ ChallengeArray::ChallengeArray(const ChallengeArray& other)
 {
     if (this != &other)
     {
-        this->capacity = other.capacity;
-        this->size = other.size;
-        this->challenges = new Challenge[capacity];
-
-        for (int i = 0; i < size; i++)
-        {
-            this->challenges[i] = other.challenges[i];
-        }
-
+        copy(other.size, other.capacity, other.challenges);
     }
 }
 
@@ -28,15 +32,7 @@ const ChallengeArray& ChallengeArray::operator=(const ChallengeArray& other)
     if (this != &other)
     {
         delete[] this->challenges;
-        this->capacity = other.capacity;
-        this->size = other.size;
-        this->challenges = new Challenge[capacity];
-
-        for (int i = 0; i < size; i++)
-        {
-            this->challenges[i] = other.challenges[i];
-        }
-
+        copy(other.size, other.capacity, other.challenges);
     }
     return *this;
 }
@@ -100,7 +96,11 @@ void ChallengeArray::add(const char* challengeName)
 
 void ChallengeArray::remove(const char* challengeName)
 {
-    if (this->contains(challengeName))
+    if (!(this->contains(challengeName)))
+    {
+        cout << "wrong challenge" << endl; 
+    }
+    else
     {
         int index = 0;
         Challenge* buffer = new Challenge[capacity];
@@ -121,10 +121,6 @@ void ChallengeArray::remove(const char* challengeName)
         delete[] this->challenges;
         this->challenges = buffer;
         this->size--;
-    }
-    else
-    {
-        cout << "wrong challenge" << endl;
     }
 }
 

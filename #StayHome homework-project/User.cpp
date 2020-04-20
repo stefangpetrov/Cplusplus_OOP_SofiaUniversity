@@ -61,6 +61,11 @@ User::~User()
         delete[] name;
 }
 
+ChallengeArray User::getUnfinChals()
+{
+    return unfinishedChals;
+}
+
 const char* User::getName() const
 {
     return this->name;

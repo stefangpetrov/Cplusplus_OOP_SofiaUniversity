@@ -1,16 +1,27 @@
 #include "Challenge.h"
 
-Challenge::Challenge(const char* _name)
+Challenge::Challenge(const char* _name):
+    numberOfChallenges(1), numberOfRaters(0), sumRate(0.00)
 {
-    this->numberOfRaters = 0;
-    this->sumRate = 0.00;
-    this->numberOfChallenges = 1;
-
-    
     if(name != nullptr)
         strcpy(this->name, _name);
     else
         strcpy(this->name, "");
+}
+
+const char* Challenge::getName() const
+{
+    return this->name;
+}
+
+void Challenge::increaseChallenges()
+{
+    this->numberOfChallenges++;
+}
+
+int Challenge::getNumberOfChallenges()
+{
+    return this->numberOfChallenges;
 }
 
 void Challenge::ChangeRating(float newRating)

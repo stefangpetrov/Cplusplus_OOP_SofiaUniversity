@@ -1,5 +1,35 @@
 #include "AllUsers.h"
 
+void AllUsers::copy(const int _size, const int _capacity, const User* _users)
+{
+    this->capacity = _capacity;
+    this->size = _size;
+    this->users = new User[capacity];
+
+    for (int i = 0; i < size; i++)
+    {
+        this->users[i] = _users[i];
+    }
+}
+
+void AllUsers::resize()
+{
+    if (size == capacity)
+    {
+        capacity *= 2;
+        User* buffer = new User[capacity];
+
+        for (size_t i = 0; i < size; i++)
+        {
+            buffer[i] = users[i];
+        }
+
+        delete[] users;
+        users = buffer;
+
+    }
+}
+
 AllUsers::AllUsers()
 {
     capacity = 2;
@@ -11,15 +41,7 @@ AllUsers::AllUsers(const AllUsers& other)
 {
     if (this != &other)
     {
-        this->capacity = other.capacity;
-        this->size = other.size;
-        this->users = new User[capacity];
-
-        for (int i = 0; i < size; i++)
-        {
-            this->users[i] = other.users[i];
-        }
-
+        copy(other.size, other.capacity, other.users);
     }
 }
 
@@ -28,15 +50,7 @@ const AllUsers& AllUsers::operator=(const AllUsers& other)
     if (this != &other)
     {
         delete[] this->users;
-        this->capacity = other.capacity;
-        this->size = other.size;
-        this->users = new User[capacity];
-
-        for (int i = 0; i < size; i++)
-        {
-            this->users[i] = other.users[i];
-        }
-
+        copy(other.size, other.capacity, other.users);
     }
     return *this;
 }
@@ -59,20 +73,7 @@ const int AllUsers::getSize() const
 
 void AllUsers::add(const char* userInfo)
 {
-    if (size == capacity)
-    {
-        capacity *= 2;
-        User* buffer = new User[capacity];
-
-        for (size_t i = 0; i < size; i++)
-        {
-            buffer[i] = users[i];
-        }
-
-        delete[] users;
-        users = buffer;
-
-    }
+    resize();
 
     char* _userInfo = nullptr;
     _userInfo = new char[strlen(userInfo) + 1];
@@ -197,13 +198,13 @@ bool AllUsers::containsID(const int ID)
 {
     for (int i = 0; i < size; i++)
     {
-        if (users[i].getId(), ID == 0)
+        if (users[i].getId() == ID )
         {
             return true;
         }
     }
     return false;
-    return false;
+
 }
 
 

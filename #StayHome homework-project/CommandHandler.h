@@ -1,17 +1,14 @@
 #pragma once
+
 #include "AllUsers.h"
 #include "ChallengeArray.h"
+
 
 class CommandHandler
 {
     AllUsers allUsers;
     ChallengeArray allChallenges;
-    bool isChallenge(const char* command);
-    bool isFinish(const char* command);
-    bool isProfileInfo(const char* command);
-    bool isListBy(const char* command);
-    bool isLoad(const char* command);
-    bool isRegistration(const char* command);
+    
     
 public:
     
