@@ -1,7 +1,7 @@
 #include "CellRow.h"
 
 CellRow::CellRow()
-{	
+{
 	f_capacity = 2;
 	f_row = new Cell[f_capacity];
 	f_size = 0;
@@ -40,7 +40,7 @@ CellRow& CellRow::operator=(const CellRow& other)
 			f_row[i] = other.f_row[i];
 		}
 
-		
+
 
 	}
 	return *this;

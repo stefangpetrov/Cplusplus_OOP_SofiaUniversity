@@ -1,27 +1,32 @@
 #pragma once
-#pragma warning(disable:4996)
-#include <iostream>
-#include <cstring>
-using namespace std;
 
+#include <iostream>
+#include <fstream>
+
+#include "String.h"
+
+using namespace std;
 class Cell
 {
 private:
-	char* f_type;//"double"
+	String f_type;
 
 	long f_intVal;
 	double f_doubleVal;
-	char* f_stringVal;
+	String f_stringVal;
 
 public:
-	Cell(const char* type = "string", long intVal = 0, double doubleVal = 0.00, const char* stringVal = "");
+	Cell(String type = "string", long intVal = 0, double doubleVal = 0.00, String stringVal = "unknown");
 
-	Cell(const Cell& other);
+	friend ostream& operator<<(ostream& out, const Cell& cell);
 
+	String getType();
 
-	Cell& operator=(const Cell& other);
+	long getIntVal();
 
-	~Cell();
+	double getDoubleVal();
 
+	String getStringVal();
 };
+
 

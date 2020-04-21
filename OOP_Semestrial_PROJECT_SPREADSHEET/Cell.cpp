@@ -1,66 +1,49 @@
 #include "Cell.h"
-#include <cstring>
 
 
-Cell::Cell(const char* type, long intVal, double doubleVal, const char* stringVal):
-	f_intVal(intVal), f_doubleVal(doubleVal)
+Cell::Cell(String type, long intVal, double doubleVal, String stringVal) :
+	f_intVal(intVal), f_doubleVal(doubleVal), f_stringVal(stringVal), f_type(type)
+{}
+
+String Cell::getType()
 {
-	if (type)
-	{
-		f_type = new char[strlen(type) + 1];
-		strcpy(f_type, type);
-	}
-	else
-	{
-		f_type = new char[strlen("string") + 1];
-		strcpy(f_type, "string");
-	}
+	return this->f_type;
+}
 
-	if (stringVal)
+long Cell::getIntVal()
+{
+	return f_intVal;
+}
+
+double Cell::getDoubleVal()
+{
+	return f_doubleVal;
+}
+
+String Cell::getStringVal()
+{
+	return f_stringVal;
+}
+
+ostream& operator<<(ostream& out, const Cell& cell)
+{
+	String str = "string";
+	String dob = "double";
+	String num = "number";
+	
+	if (str == cell.f_type)
 	{
-		f_stringVal = new char[strlen(stringVal) + 1];
-		strcpy(f_stringVal, stringVal);
+		out << cell.f_stringVal << endl;
 	}
-	else
+	else if (dob == cell.f_type)
 	{
-		f_stringVal = new char[strlen("") + 1];
-		strcpy(f_stringVal, "");
+		out << cell.f_doubleVal << endl;
+	}
+	else if (num == cell.f_type)
+	{
+		out << cell.f_intVal << endl;
 	}
 	
-}
 
-Cell::Cell(const Cell& other)
-{
-
-	if (this != &other)
-	{
-		f_intVal = other.f_intVal;
-		f_doubleVal = other.f_doubleVal;
-
-		strcpy(f_stringVal, other.f_stringVal);
-		strcpy(f_type, other.f_type);
-	}
-}
-
-Cell& Cell::operator=(const Cell& other)
-{
-	if (this != &other)
-	{
-		delete[] f_stringVal;
-		delete[] f_type;
-
-		f_intVal = other.f_intVal;
-		f_doubleVal = other.f_doubleVal;
-
-		strcpy(f_stringVal, other.f_stringVal);
-		strcpy(f_type, other.f_type);
-	}
-
-	return *this;
-}
-
-Cell::~Cell()
-{
-	delete[] f_stringVal;
-	delete[] f_type;
+	return out;
 }
