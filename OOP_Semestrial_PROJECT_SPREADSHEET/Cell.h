@@ -11,22 +11,19 @@ class Cell
 private:
 	String f_type;
 
-	long f_intVal;
-	double f_doubleVal;
-	String f_stringVal;
+	String f_value;
 
 public:
-	Cell(String type = "string", long intVal = 0, double doubleVal = 0.00, String stringVal = "unknown");
+	Cell();
 
 	friend ostream& operator<<(ostream& out, const Cell& cell);
 
-	String getType();
+	const String getType() const;
+	void setNewVal(String type, String value);
 
-	long getIntVal();
+	const String getValue() const;
 
-	double getDoubleVal();
-
-	String getStringVal();
+	
 };
 
 

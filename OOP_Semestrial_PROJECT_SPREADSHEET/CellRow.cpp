@@ -1,52 +1,27 @@
 #include "CellRow.h"
+#include <iomanip>
 
-CellRow::CellRow()
+
+void CellRow::addCell(const Cell& cell)
 {
-	f_capacity = 2;
-	f_row = new Cell[f_capacity];
-	f_size = 0;
+	f_row.to_end(cell);
 }
 
-CellRow::CellRow(const CellRow& other)
+void CellRow::print()
 {
-	if (this != &other)
+	for (size_t i = 0; i < f_row.length(); i++)
 	{
-		f_size = other.f_size;
-		f_capacity = other.f_capacity;
-
-		f_row = new Cell[f_capacity];
-
-		for (size_t i = 0; i < f_size; i++)
-		{
-			f_row[i] = other.f_row[i];
-		}
-
-
+		cout << f_row[i]<<" ";
 	}
+	cout << endl;
 }
 
-CellRow& CellRow::operator=(const CellRow& other)
+ostream& operator<<(ostream& out, const CellRow& row)
 {
-	if (this != &other)
+	for (size_t i = 0; i < row.f_row.length(); i++)
 	{
-		delete[] f_row;
-		f_size = other.f_size;
-		f_capacity = other.f_capacity;
-
-		f_row = new Cell[f_capacity];
-
-		for (size_t i = 0; i < f_size; i++)
-		{
-			f_row[i] = other.f_row[i];
-		}
-
-
-
+		out << row.f_row[i] << setw(10) << " | ";
 	}
-	return *this;
-}
-
-CellRow::~CellRow()
-{
-	delete[] f_row;
+	out << endl;
+	return out;
 }

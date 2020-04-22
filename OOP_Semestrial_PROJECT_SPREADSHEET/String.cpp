@@ -1,8 +1,10 @@
 #include "String.h"
+#include "String.h"
 
 String::String()
 {
-    str = nullptr;
+    str = new char[1];
+    strcpy(str, "\0");
     length = 0;
 };
 
@@ -107,6 +109,28 @@ String String::operator+=(const char* _str)
     return *this;
 }
 
+String String::operator+=(char _str)
+{
+    int newLength = this->length + 1, index = this->getLength();
+    char* biggerBuffer = new char[newLength + 1];
+
+    for (int i = 0; i < this->length; i++)
+    {
+        biggerBuffer[i] = this->str[i];
+    }
+
+    biggerBuffer[index] = _str;
+    index++;
+
+    biggerBuffer[index] = '\0';
+    delete[] this->str;
+
+    this->str = biggerBuffer;
+    this->length = newLength;
+
+    return *this;
+}
+
 String String::operator+(const String& other)
 {
     String res;
@@ -162,13 +186,22 @@ char String::operator[](const int index) const
 }
 
 bool String::operator!=(const String& other)
-{
-    return strcmp(this->str, other.str) != 0;
+{ 
+    return strcmp(this->str, other.str) != 0;    
 }
 
 bool String::operator==(const String& other)
 {
     return strcmp(this->str, other.str) == 0;
+
+    return false;
+}
+
+bool String::operator==(const char* other)
+{
+    return strcmp(this->str, other) == 0;
+
+    return false;
 }
 
 bool String::operator<(const String& other)

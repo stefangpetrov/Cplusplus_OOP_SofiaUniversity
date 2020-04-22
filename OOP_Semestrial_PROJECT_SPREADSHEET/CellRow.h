@@ -1,21 +1,18 @@
 #pragma once
 #include "Cell.h"
+#include "vector.cpp"
 
 class CellRow
 {
 private:
 
-	Cell* f_row;
-	size_t f_capacity;
-	size_t f_size;
+	Vector<Cell> f_row;
 
 public:
-	CellRow();
+	
+	void addCell(const Cell& cell);
+	void print();
 
-	CellRow(const CellRow& other);
-
-	CellRow& operator=(const CellRow& other);
-
-	~CellRow();
+	friend ostream& operator <<(ostream& out, const CellRow& row);
 };
 

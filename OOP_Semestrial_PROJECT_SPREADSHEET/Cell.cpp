@@ -1,49 +1,34 @@
 #include "Cell.h"
 
 
-Cell::Cell(String type, long intVal, double doubleVal, String stringVal) :
-	f_intVal(intVal), f_doubleVal(doubleVal), f_stringVal(stringVal), f_type(type)
-{}
+Cell::Cell()
+{
+	setNewVal(String("string"), String(""));
+}
 
-String Cell::getType()
+
+
+const String Cell::getType() const
 {
 	return this->f_type;
 }
 
-long Cell::getIntVal()
+void Cell::setNewVal(String type, String value) 
 {
-	return f_intVal;
+	f_type = type;
+	f_value = value;
 }
 
-double Cell::getDoubleVal()
+const String Cell::getValue() const
 {
-	return f_doubleVal;
+	return f_value;
 }
 
-String Cell::getStringVal()
-{
-	return f_stringVal;
-}
+
 
 ostream& operator<<(ostream& out, const Cell& cell)
 {
-	String str = "string";
-	String dob = "double";
-	String num = "number";
-	
-	if (str == cell.f_type)
-	{
-		out << cell.f_stringVal << endl;
-	}
-	else if (dob == cell.f_type)
-	{
-		out << cell.f_doubleVal << endl;
-	}
-	else if (num == cell.f_type)
-	{
-		out << cell.f_intVal << endl;
-	}
-	
-
+	out << cell.f_value;
 	return out;
 }
+

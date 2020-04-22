@@ -30,12 +30,14 @@ public:
 
     String operator+=(const String& other);
     String operator+=(const char* _str);
+    String operator+=(char _str);
     String operator+(const String& other);
     String operator+(const char* _str);
     char operator[](const int index) const;
 
     bool operator!=(const String& other);
     bool operator==(const String& other);
+    bool operator==(const char* other);
     bool operator<(const String& other);
     bool operator>(const String& other);
     bool operator<=(const String& other);
