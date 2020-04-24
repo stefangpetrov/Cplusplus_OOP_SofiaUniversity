@@ -43,11 +43,17 @@ public:
     bool operator<=(const String& other);
     bool operator>=(const String& other);
 
+    bool isIntString();
+    bool isDoubleString();
+    bool isGood();
+
     void output();
     void add(const char* _str);
     void removeLast();
     String slice(int start, int end) const;
     void replace(const char* oldWord, const char* newWord);
+
+    
 
     friend ostream& operator <<(ostream& out, const String str);
 };

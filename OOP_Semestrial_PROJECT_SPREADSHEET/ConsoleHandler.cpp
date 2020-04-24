@@ -34,14 +34,109 @@ void ConsoleHandler::open(String path)
     f_filePath = path;
 
     char* token;
-    token = strtok(PATH, "/");
+    token = strtok(PATH, "/\\");
 
     while (token != NULL)
     {
         f_fileName = token;
-
-        token = strtok(NULL, "/");
+        token = strtok(NULL, "/\\");
     }
+
+    while (!f_inout.eof())
+
+    {
+        char c;
+        String strRow;
+
+        while (f_inout.get(c))
+        {
+            if ('\n' == c || '\r' == c)
+            {
+                break;
+            }
+            else
+            {               
+                strRow += c;
+            }
+
+        }       
+        
+        if (strRow.getLength() == 0)
+        {
+            CellRow emptyRow;
+            f_table.addRow(emptyRow);
+        }
+        else
+        {
+            CellRow nonEmptyRow;
+            String value;
+
+            for (size_t i = 0; i < strRow.getLength(); i++)
+            {
+                if (strRow[i] == '\"' && i < strRow.getLength() - 1)
+                {
+                    value += '\"';
+                    i++;
+                    bool isValidStr = false;
+                    for (; i < strRow.getLength(); i++)
+                    {
+                        value += strRow[i];
+                        
+                        if (strRow[i] == '\"' && strRow[i-1] != '\\')
+                        {
+                            isValidStr = true;
+                            break;
+                        }
+                        
+                        
+                    }
+                    if (!isValidStr)
+                    {
+                        value = "";
+                    }
+                }
+                else
+                {
+                    if (strRow[i] != ',')
+                    {
+                        value += strRow[i];
+                        if (i == strRow.getLength() - 1)
+                        {
+                            Cell currentCell(value);
+                            nonEmptyRow.addCell(currentCell);
+                        }
+                    }
+                    else
+                    {
+                        Cell currentCell(value);
+
+                        value = "";
+                        nonEmptyRow.addCell(currentCell);
+                        if (i + 1 < strRow.getLength() - 1)
+                        {
+                            if (strRow[i + 1] != ',' && strRow[i + 1] == ' ')
+                            {
+                                i++;
+                            }
+                        }
+
+
+                    }
+                    if (i == strRow.getLength() - 1 && strRow[i] == ',')
+                    {
+                        Cell currentCell;
+                        nonEmptyRow.addCell(currentCell);
+                    }
+                }
+                
+                
+            }
+            f_table.addRow(nonEmptyRow);
+        }
+    }
+
+    f_table.addCellsWhereNeeded();
+    cout << f_table;
 
     if (PATH != nullptr)
         delete[] PATH;
@@ -57,10 +152,13 @@ void ConsoleHandler::save()
     }
     else
     {
-        f_inout.clear();
+        f_inout.close();
+        f_inout.open(f_filePath.getStr(), ios::out | ios::trunc);
+        f_inout.close();
+        f_inout.open(f_filePath.getStr());
 
         f_inout << f_table;
-        cout << "Successfully saved in " << f_fileName << "file";
+        cout << "Successfully saved in " << f_fileName << " file" << endl;
     }
 }
 
@@ -76,6 +174,7 @@ void ConsoleHandler::saveAs(String path)
         fstream newstream(path.getStr());
         if (!newstream.is_open())
         {
+            newstream.close();
             ofstream openFile(path.getStr());
             if (!openFile.is_open())
             {
@@ -85,17 +184,26 @@ void ConsoleHandler::saveAs(String path)
             else
             {
                 openFile.close();
-                f_inout.open(path.getStr());
-                if (!f_inout.is_open())
+                newstream.open(path.getStr());
+                if (!newstream.is_open())
                 {
                     cout << "Not a valid path fo saving data." << endl;
                     return;
+                }
+                else
+                {
+                    newstream << f_table;
+                    cout << "Successfully saved in file" << endl;
+                    newstream.close();
                 }
             }
         }
         else
         {
-            newstream.clear();
+            newstream.close();
+            newstream.open(path.getStr(), ios::out | ios::trunc);
+            newstream.close();
+            newstream.open(path.getStr());
 
             newstream << f_table;
              
@@ -114,7 +222,7 @@ void ConsoleHandler::close()
     }
     else
     {
-        cout << "Successfully closed" << f_fileName << "file";
+        cout << "Successfully closed" << f_fileName << " file" <<endl;
         f_fileName = "";
         f_filePath = "";
 
@@ -162,10 +270,7 @@ void ConsoleHandler::handleCommand(String command)
     String path;
     for (size_t i = commandName.getLength() + 1; i < command.getLength(); i++)
     {
-        if (command[i] != '\\')
-            path += command[i];
-        else
-            path += '/';
+        path += command[i];
         
     }
 

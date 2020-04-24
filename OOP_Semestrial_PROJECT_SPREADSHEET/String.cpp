@@ -224,6 +224,107 @@ bool String::operator>=(const String& other)
     return strcmp(this->str, other.str) >= 0;
 }
 
+bool String::isIntString()
+{
+    if (this->str[0] == '+' || this->str[0] == '-')
+    {
+        for (size_t i = 1; i < this->length; i++)
+        {
+            if (this->str[i] < '0' || this->str[i] > '9')
+            {
+                return false;
+            }
+        }
+    }
+    for (size_t i = 0; i < this->length; i++)
+    {
+        if (this->str[i] < '0' || this->str[i] > '9')
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool String::isDoubleString()
+{
+    char* copy = nullptr;
+    char* tok = nullptr;
+
+    if (this->str[0] == '+' || this->str[0] == '-')
+    {
+        copy = new char[this->length];
+        strcpy(copy, this->str + 1);
+
+
+    }
+    else
+    {
+        
+        copy = new char[this->length + 1];
+        strcpy(copy, this->str);
+
+        
+    }
+    
+    tok = strtok(copy, ".");
+    
+
+    if (tok != nullptr)
+    {
+        if (strcmp(tok, this->str) == 0)
+        {
+            return false;
+        }
+
+        for (size_t i = 0; i < strlen(tok); i++)
+        {
+            if (tok[i] < '0' || tok[i] > '9')
+            {
+                return false;
+            }
+        }
+
+        tok = strtok(NULL, ".");
+        for (size_t i = 0; i < strlen(tok); i++)
+        {
+            if (tok[i] < '0' || tok[i] > '9')
+            {
+                return false;
+            }
+        }
+
+        tok = strtok(NULL, ".");
+
+        if (tok == NULL)
+        {
+            return true;
+        }
+    }
+    
+    return false;
+
+}
+
+bool String::isGood()
+{
+    bool strIsGood = true;
+    for (size_t i = 1; i < this->length - 1; i++)
+    {
+        if (this->str[i] == '\"' || this->str[i] == '\\')
+        {
+            if (this->str[i - 1] != '\\')
+            {
+                strIsGood = false;
+            }
+
+        }
+    }
+    return strIsGood;
+}
+
+
 int String::getLength() const
 {
     return this->length;
@@ -391,6 +492,8 @@ void String::replace(const char* oldWord, const char* newWord)
         }
     }
 }
+
+
 
 ostream& operator<<(ostream& out, const String str)
 {

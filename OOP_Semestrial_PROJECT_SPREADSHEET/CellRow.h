@@ -11,6 +11,7 @@ private:
 public:
 	
 	void addCell(const Cell& cell);
+	size_t getLength();
 	void print();
 
 	friend ostream& operator <<(ostream& out, const CellRow& row);

@@ -9,7 +9,7 @@ private:
 public:
 	Table();
 	void addRow( CellRow row);
-
+	void addCellsWhereNeeded();
 	friend ostream& operator <<(ostream& out, const Table& table);
 };
 
