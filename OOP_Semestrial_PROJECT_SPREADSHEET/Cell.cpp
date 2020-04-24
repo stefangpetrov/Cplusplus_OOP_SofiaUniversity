@@ -72,6 +72,11 @@ void Cell::setNewVal(String type, String value, int intVal)
 	f_intValue = intVal;
 }
 
+const int Cell::getLength() const
+{
+    return f_value.getLength();
+}
+
 void Cell::setNewVal(String type, String value, double doubleVal) 
 {
 	f_type = type;

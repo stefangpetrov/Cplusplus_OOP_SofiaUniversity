@@ -1,5 +1,5 @@
 #include "CellRow.h"
-#include <iomanip>
+
 
 
 void CellRow::addCell(const Cell& cell)
@@ -19,6 +19,11 @@ void CellRow::print()
 		cout << f_row[i]<<" ";
 	}
 	cout << endl;
+}
+
+const Cell CellRow::operator[](size_t i)
+{
+	return f_row[i];
 }
 
 ostream& operator<<(ostream& out, const CellRow& row)

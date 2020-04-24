@@ -136,6 +136,7 @@ void ConsoleHandler::open(String path)
     }
 
     f_table.addCellsWhereNeeded();
+    f_table.takeBiggestColumnSizes();
     cout << f_table;
 
     if (PATH != nullptr)

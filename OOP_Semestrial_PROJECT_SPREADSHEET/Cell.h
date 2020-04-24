@@ -26,6 +26,9 @@ public:
 	void setNewVal(String type, String value, double doubleVal);
 	void setNewVal(String type, String value, int intVal);
 
+	const int getLength() const;
+
+
 
 	const String getValue() const;
 
