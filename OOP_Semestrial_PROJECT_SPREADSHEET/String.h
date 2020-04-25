@@ -45,7 +45,6 @@ public:
 
     bool isIntString();
     bool isDoubleString();
-    bool isGood();
 
     void output();
     void add(const char* _str);

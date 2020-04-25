@@ -313,24 +313,6 @@ bool String::isDoubleString()
 
 }
 
-bool String::isGood()
-{
-    bool strIsGood = true;
-    for (size_t i = 1; i < this->length - 1; i++)
-    {
-        if (this->str[i] == '\"' || this->str[i] == '\\')
-        {
-            if (this->str[i - 1] != '\\')
-            {
-                strIsGood = false;
-            }
-
-        }
-    }
-    return strIsGood;
-}
-
-
 int String::getLength() const
 {
     return this->length;

@@ -28,22 +28,19 @@ Cell::Cell(String value)
 
         if (value[0] == '\"' && value[value.getLength() - 1] == '\"')
         {
-            if (value.isGood())
+            String cellValue;
+            for (size_t j = 1; j < value.getLength() - 1; j++)
             {
-                String cellValue;
-                for (size_t j = 1; j < value.getLength() - 1; j++)
-                {
-                    cellValue += value[j];
-                }
-                String str = "string";
-                this->setNewVal(str, cellValue);
+                cellValue += value[j];
             }
-            else
-            {
-                value = "INVALID_STRING";
-                String str = "string";
-                this->setNewVal(str, value);
-            }
+            String str = "string";
+            this->setNewVal(str, cellValue);   
+        }
+        else
+        {
+            value = "INVALID_STRING";
+            String str = "string";
+            this->setNewVal(str, value);
         }
         
     }

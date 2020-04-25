@@ -92,13 +92,34 @@ void ConsoleHandler::open(String path)
                     bool isValidStr = false;
                     for (; i < strRow.getLength(); i++)
                     {
+                        
+                        if (i < strRow.getLength() - 2)
+                        {
+                            if (strRow[i] == '\\' && strRow[i + 1] == '\"')
+                            {
+                                value += "\"";
+                                
+                                i++;
+                                continue;
+                            }
+                            else if (strRow[i] == '\\' && strRow[i + 1] == '\\')
+                            {
+                                value += "\\";
+                                
+                                i++;
+                                continue;
+                            }
+                            
+                        }
+                        
                         value += strRow[i];
                         
-                        if (strRow[i] == '\"' && strRow[i-1] != '\\')
+                        if (strRow[i] == '\"' && strRow[i - 1] != '\\')
                         {
                             isValidStr = true;
                             break;
                         }
+                        
                         
                         
                     }
