@@ -19,6 +19,11 @@ void ConsoleHandler::open(String path)
 
     strcpy(PATH, path.getStr());
 
+    if (f_inout.is_open())
+    {
+        cout << "Already opened a file." << endl;
+        return;
+    }
     f_inout.open(PATH);
 
     if (!f_inout.is_open())
@@ -104,9 +109,34 @@ void ConsoleHandler::open(String path)
                             }
                             else if (strRow[i] == '\\' && strRow[i + 1] == '\\')
                             {
-                                value += "\\";
+                                int counter = 0;
+                                while (i < strRow.getLength() - 1 && strRow[i] == '\\')
+                                {
+                                    counter++;
+                                    i++;
+                                    if (counter % 2 == 0 && strRow[i] != '\"')
+                                    {
+                                        value += "\\";
+                                    }
+                                }
+
+                                if (counter % 2 == 0 && strRow[i] == '\"')
+                                {
+                                    value = "";
+                                    break;
+                                }
+                                else if(counter % 2 == 1 && strRow[i] != '\"')
+                                {
+                                    value = "";
+                                    break;
+                                }
+                                else if (counter % 2 == 1 && strRow[i] == '\"')
+                                {
+                                    value += "\"";
+                                }
+                                    
                                 
-                                i++;
+                                //i++;
                                 continue;
                             }
                             
@@ -116,10 +146,21 @@ void ConsoleHandler::open(String path)
                         
                         if (strRow[i] == '\"' && strRow[i - 1] != '\\')
                         {
+                            if (i < strRow.getLength() - 2)
+                            {
+                                if (strRow[i + 1] != ' ' && strRow[i + 1] != ',')
+                                {
+                                    break;
+                                }
+                            }
                             isValidStr = true;
                             break;
                         }
-                        
+                        if (strRow[i] == '\\' && strRow[i - 1] != '\\')
+                        {
+                            
+                            break;
+                        }
                         
                         
                     }
@@ -263,7 +304,7 @@ void ConsoleHandler::close()
         cout << "Successfully closed" << f_fileName << " file" <<endl;
         f_fileName = "";
         f_filePath = "";
-
+        f_table = Table();
         f_inout.close();
     }
 }
