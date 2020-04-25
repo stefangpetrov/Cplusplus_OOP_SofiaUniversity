@@ -236,13 +236,17 @@ bool String::isIntString()
             }
         }
     }
-    for (size_t i = 0; i < this->length; i++)
+    else
     {
-        if (this->str[i] < '0' || this->str[i] > '9')
+        for (size_t i = 0; i < this->length; i++)
         {
-            return false;
+            if (this->str[i] < '0' || this->str[i] > '9')
+            {
+                return false;
+            }
         }
     }
+    
 
     return true;
 }
@@ -287,6 +291,8 @@ bool String::isDoubleString()
         }
 
         tok = strtok(NULL, ".");
+        if (tok == NULL)
+            return false;
         for (size_t i = 0; i < strlen(tok); i++)
         {
             if (tok[i] < '0' || tok[i] > '9')

@@ -1,5 +1,17 @@
 #include "ConsoleHandler.h"
 
+void ConsoleHandler::print()
+{
+    if (!f_inout.is_open())
+    {
+        cout << "There is not a table thats been loaded yet. Try opening a file first!" << endl;
+    }
+    else
+    {
+        cout << f_table;
+    }
+}
+
 void ConsoleHandler::open(String path)
 {
     char* PATH = nullptr;
@@ -93,6 +105,11 @@ void ConsoleHandler::open(String path)
                     if (!isValidStr)
                     {
                         value = "";
+                    }
+                    else if(i == strRow.getLength() - 1)
+                    {
+                        Cell currentCell(value);
+                        nonEmptyRow.addCell(currentCell);
                     }
                 }
                 else
@@ -276,10 +293,14 @@ void ConsoleHandler::handleCommand(String command)
     }
 
 
-
+    
     if (commandName == "open")
     {
         open(path);
+    }
+    else if (commandName == "print")
+    {
+
     }
     else if (commandName == "save")
     {

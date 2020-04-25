@@ -11,6 +11,7 @@ private:
 	String f_filePath;
 	Table f_table;
 
+	void print();
 	void open(String path);
 	void save();
 
