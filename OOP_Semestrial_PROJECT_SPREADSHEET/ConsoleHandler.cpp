@@ -106,7 +106,7 @@ void ConsoleHandler::open(String path)
                     {
                         value = "";
                     }
-                    else if(i == strRow.getLength() - 1)
+                    if(i == strRow.getLength() - 1)
                     {
                         Cell currentCell(value);
                         nonEmptyRow.addCell(currentCell);
@@ -114,7 +114,8 @@ void ConsoleHandler::open(String path)
                 }
                 else
                 {
-                    if (strRow[i] != ',')
+                    
+                    if (strRow[i] != ',' && strRow[i] != ' ')
                     {
                         value += strRow[i];
                         if (i == strRow.getLength() - 1)
@@ -123,7 +124,7 @@ void ConsoleHandler::open(String path)
                             nonEmptyRow.addCell(currentCell);
                         }
                     }
-                    else
+                    else if(strRow[i] == ',')
                     {
                         Cell currentCell(value);
 
@@ -131,10 +132,8 @@ void ConsoleHandler::open(String path)
                         nonEmptyRow.addCell(currentCell);
                         if (i + 1 < strRow.getLength() - 1)
                         {
-                            if (strRow[i + 1] != ',' && strRow[i + 1] == ' ')
-                            {
+                            while (strRow[i + 1] == ' ')
                                 i++;
-                            }
                         }
 
 
