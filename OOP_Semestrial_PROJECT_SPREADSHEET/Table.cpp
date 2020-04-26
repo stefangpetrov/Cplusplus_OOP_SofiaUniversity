@@ -5,6 +5,27 @@ Table::Table()
 	f_biggestRowSize = 0;
 }
 
+Table::Table(const Table& other)
+{
+	if (this != &other)
+	{
+		f_table = other.f_table;
+		f_columnSizes = other.f_columnSizes;
+		f_biggestRowSize = other.f_biggestRowSize;
+	}
+}
+
+Table& Table::operator=(const Table& other)
+{
+	if (this != &other)
+	{
+		f_table = other.f_table;
+		f_columnSizes = other.f_columnSizes;
+		f_biggestRowSize = other.f_biggestRowSize;
+	}
+	return *this;
+}
+
 void Table::addRow(CellRow row)
 {
 	f_table.to_end(row);
@@ -12,6 +33,7 @@ void Table::addRow(CellRow row)
 	{
 		f_biggestRowSize = row.getLength();
 	}
+	f_columnSizes.to_end(f_table[f_table.length() - 1][0].getLength());
 }
 
 void Table::addCellsWhereNeeded()
@@ -27,6 +49,29 @@ void Table::addCellsWhereNeeded()
 	}
 }
 
+bool Table::signalMistakes()
+{
+	bool thereAre = false;
+
+	for (size_t i = 0; i < f_table.length(); i++)
+	{
+		for (size_t j = 0; j < f_table[i].getLength(); j++)
+		{
+			
+			if (strcmp(f_table[i][j].getType().getStr(), "INVALID_TYPE") == 0)
+			{
+				thereAre = true;
+				cout << "ERROR: row " << i << " col " << j << " " << f_table[i][j].getValue() << " is unknown data type" << endl;
+				String emptyVal = "";
+				Cell newCell(emptyVal);
+				f_table[i][j] = newCell;
+			}
+		}
+	}
+
+	return thereAre;
+}
+
 void Table::takeBiggestColumnSizes()
 {
 	if (f_table.length() > 1)
@@ -38,17 +83,8 @@ void Table::takeBiggestColumnSizes()
 		}
 	}
 
-	for (size_t i = 0; i < f_biggestRowSize; i++)
-	{
-		if (i > f_columnSizes.length())
-		{
-			
-			f_columnSizes.to_end(f_table[0][i].getLength());
-		}
-		
-	}
 
-	for (size_t i = 0; i < f_biggestRowSize; i++)
+	for (size_t i = 0; i < f_columnSizes.length(); i++)
 	{
 		size_t currentColSize = f_table[0][i].getLength();
 		for (size_t j = 1; j < f_table.length(); j++)
@@ -68,6 +104,7 @@ void Table::takeBiggestColumnSizes()
 
 ostream& operator<<(ostream& out, const Table& table)
 {
+	
 	for (size_t i = 0; i < table.f_table.length(); i++)
 	{
 		for (size_t j = 0; j < table.f_biggestRowSize; j++)

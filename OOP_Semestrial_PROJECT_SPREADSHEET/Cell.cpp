@@ -9,7 +9,7 @@ Cell::Cell():
 
 Cell::Cell(String value)
 {
-    this->setNewVal(String("string"), String(""));
+     this->setNewVal(String("string"), String(""));
 
     if (value.isIntString())
     {
@@ -38,8 +38,7 @@ Cell::Cell(String value)
         }
         else
         {
-            value = "INVALID_STRING";
-            String str = "string";
+            String str = "INVALID_TYPE";
             this->setNewVal(str, value);
         }
         
@@ -74,7 +73,7 @@ const int Cell::getLength() const
     return f_value.getLength();
 }
 
-void Cell::setNewVal(String type, String value, double doubleVal) 
+void Cell::setNewVal(String type, String value, double doubleVal)
 {
 	f_type = type;
 	f_value = value;
@@ -84,6 +83,11 @@ void Cell::setNewVal(String type, String value, double doubleVal)
 const String Cell::getValue() const
 {
 	return f_value;
+}
+
+void Cell::setValue(String newValue)
+{
+    f_value = newValue;
 }
 
 

@@ -21,7 +21,7 @@ void CellRow::print()
 	cout << endl;
 }
 
-const Cell CellRow::operator[](size_t i)
+Cell& CellRow::operator[](size_t i)
 {
 	return f_row[i];
 }

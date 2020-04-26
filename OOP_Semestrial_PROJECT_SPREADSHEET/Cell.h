@@ -32,7 +32,7 @@ public:
 
 	const String getValue() const;
 
-	
+	void setValue(String newValue);
 };
 
 

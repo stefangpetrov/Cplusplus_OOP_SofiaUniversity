@@ -3,7 +3,7 @@
 template<class T>
 Vector<T>::Vector()
 {
-    data = nullptr;
+    data = new T[2];
     size = 0;
 }
 
