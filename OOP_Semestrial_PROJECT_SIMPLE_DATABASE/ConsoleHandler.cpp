@@ -5,6 +5,20 @@ void ConsoleHandler::splitRowValues(Vector<String>& colTypes, String strRow)
     String value;
     for (size_t i = 0; i < strRow.getLength(); i++)
     {
+        if (value[0] == '\"')
+        {
+            for (; i < strRow.getLength(); i++)
+            {
+                value += strRow[i];
+                if (strRow[i] == '\"' && strRow[i - 1] != '\\')
+                {
+                    i++;
+                    break;
+                }
+                
+            }
+        }
+
         if (strRow[i] != ' ')
         {
             value += strRow[i];
@@ -227,6 +241,12 @@ void ConsoleHandler::save()
 
 void ConsoleHandler::importFile(String path)
 {
+
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first." << endl;
+        return;
+    }
     char* PATH = nullptr;
     PATH = new char[path.getLength() + 1];
 
@@ -300,11 +320,24 @@ void ConsoleHandler::importFile(String path)
         }
 
         strRow = "";
-        getCurrentRow(newTableData, strRow);
-        while (strRow.getLength() > 0)
+        
+        bool tooManyArguments = false;
+
+        
+        do
         {
+            if (newTableData.eof())
+            {
+                break;
+            }
+            getCurrentRow(newTableData, strRow);
             Vector<String> rowValues;
             splitRowValues(rowValues, strRow);
+            if (rowValues.length() > colHeaders.length())
+            {
+                tooManyArguments = true;
+                break;
+            }
             
             int i = 0;
             for (; i < rowValues.length(); i++)
@@ -333,9 +366,15 @@ void ConsoleHandler::importFile(String path)
             }
 
             strRow = "";
-            getCurrentRow(newTableData, strRow);
-        }
+            
 
+        } while (!newTableData.eof());
+
+        if (tooManyArguments)
+        {
+            cout << "Too many arguments in a row. Try importing a valid table." << endl;
+            return;
+        }
         newTable.takeBiggestColumnSizes();
         f_dataBase.to_end(newTable);
         cout << "Successfully imported a table" << endl;
@@ -564,6 +603,11 @@ void ConsoleHandler::select(int col, String value, String tableName)
         cout << "Try opening a file first!" << endl;
         return;
     }
+    else if (value.getLength() < 1 && value.getLength() < 1)
+    {
+        cout << "Incomplete command. Try again" << endl;
+        return;
+    }
     
     for (size_t i = 0; i < f_dataBase.length(); i++)
     {
@@ -572,6 +616,27 @@ void ConsoleHandler::select(int col, String value, String tableName)
             f_dataBase[i].printAllRowsWithValueInCol(col, value);
         }
     }
+}
+
+void ConsoleHandler::describe(String tableName)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            for (size_t j = 0; j < f_dataBase[i].getLength(); j++)
+            {
+                cout << "col " << j + 1 << "is of type " << f_dataBase[i][j].getType() << endl;
+            }
+        }
+    }
+
 }
 
 
@@ -646,6 +711,10 @@ void ConsoleHandler::handleCommand(String command)
     else if (tokens[0] == "showtables")
     {
         showTables();
+    }
+    else if (tokens[0] == "describe")
+    {
+        describe(tokens[1]);
     }
     else if (tokens[0] == "count")
     {

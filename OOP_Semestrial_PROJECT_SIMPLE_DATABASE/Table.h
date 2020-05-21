@@ -25,6 +25,7 @@ public:
 
 	void takeBiggestColumnSizes();
 
-	void printAllRowsWithValueInCol(int col, String value);
+	void printAllRowsWithValueInCol(int col, String value
+	);
 };
 

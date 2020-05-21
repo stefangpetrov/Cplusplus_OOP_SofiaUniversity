@@ -40,6 +40,8 @@ private:
 	void renameTable(String oldName, String newName);
 
 	void select(int col, String value, String tableName);
+
+	void describe(String tableName);
 public:
 
 

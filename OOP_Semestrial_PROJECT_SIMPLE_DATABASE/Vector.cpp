@@ -1,4 +1,5 @@
 #include "Vector.h"
+//TAKEN FROM https://github.com/stranxter/lecture-notes/tree/master/samples/02_oop/2020_kn/classes
 
 template<class T>
 Vector<T>::Vector()
