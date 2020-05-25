@@ -46,6 +46,10 @@ private:
 	void addColumn(String tableName, String columnName, String columnType);
 
 	void update(String tableName, int searchCol, String searchValue, int targetCol, String targetValue);
+
+	void deleteRows(String tableName, int searchCol, String searchValue);
+
+	void insert(Vector<String> tokens);
 public:
 
 

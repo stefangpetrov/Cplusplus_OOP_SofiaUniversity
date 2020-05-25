@@ -1,6 +1,6 @@
 #include "Column.h"
 
-void Column::addCell(const Cell& cell)
+void Column::addCell(const Cell cell)
 {
 	f_column.to_end(cell);
 }

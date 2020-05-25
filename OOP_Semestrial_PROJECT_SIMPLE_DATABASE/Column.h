@@ -10,7 +10,7 @@ private:
 	String f_header;
 
 public:
-	void addCell(const Cell& cell);
+	void addCell(const Cell cell);
 	size_t getLength();
 
 

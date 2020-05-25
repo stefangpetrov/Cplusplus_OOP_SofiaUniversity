@@ -765,6 +765,112 @@ void ConsoleHandler::update(String tableName, int searchCol, String searchValue,
     
 }
 
+void ConsoleHandler::deleteRows(String tableName, int searchCol, String searchValue)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    Table newTable;
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            newTable.setName(f_dataBase[i].getName());
+            for (size_t j = 0; j < f_dataBase[i].getLength(); j++)
+            {
+                
+                Column newCol;
+                newCol.setHeader(f_dataBase[i][j].getHeader());
+                newTable.addColumn(newCol);
+            }
+
+            if (searchCol > f_dataBase[i].getLength() || searchCol <= 0)
+            {
+                cout << "Invalid column!" << endl;
+                return;
+            }
+
+            for (size_t j = 0; j < f_dataBase[i][searchCol - 1].getLength(); j++)
+            {
+                String current = f_dataBase[i][searchCol - 1][j].getValue();
+                if (current == searchValue)
+                {
+                    continue;
+                }
+                
+                for (size_t k = 0; k < f_dataBase[i].getLength(); k++)
+                {
+                    newTable[k].addCell(f_dataBase[i][k][j]);
+                }
+            }
+
+            newTable.takeBiggestColumnSizes();
+
+            f_dataBase[i] = newTable;
+        }
+    }
+}
+
+void ConsoleHandler::insert(Vector<String> tokens)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    String tableName = tokens[1];
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            if (f_dataBase[i].getLength() != tokens.length() - 2)
+            {
+                cout << "Invalid parameters!" << endl;
+                return;
+            }
+
+            for (size_t j = 2; j < tokens.length(); j++)
+            {
+                String currentColType = f_dataBase[i][j - 2].getType();
+                if (currentColType == "string")
+                {
+                    
+                    String value = "NULL";
+                    if (tokens[j][0] != '\"' || tokens[j][tokens[j].getLength() - 1] != '\"')
+                    {
+                        Cell newCell(currentColType, value);
+                        f_dataBase[i][j - 2].addCell(newCell);
+                    }
+                    else
+                    {
+                        String newVal;
+                        for (size_t k = 1; k < tokens[j].getLength() - 1; k++)
+                        {
+                            newVal += tokens[j][k];
+                        }
+                        Cell newCell(currentColType, newVal);
+                        f_dataBase[i][j - 2].addCell(newCell);
+
+                    }
+                }
+                else if (currentColType == "int" || currentColType == "double")
+                {
+                    Cell newCell(currentColType, tokens[j]);
+                    f_dataBase[i][j - 2].addCell(newCell);
+                }
+               
+            }
+
+            f_dataBase[i].takeBiggestColumnSizes();
+        }
+    }
+    
+}
+
 
 void ConsoleHandler::handleCommand(String command)
 {
@@ -849,6 +955,14 @@ void ConsoleHandler::handleCommand(String command)
     else if (tokens[0] == "update")
     {
         update(tokens[1], atoi(tokens[2].getStr()), tokens[3], atoi(tokens[4].getStr()), tokens[5]);
+    }
+    else if (tokens[0] == "delete")
+    {
+        deleteRows(tokens[1], atoi(tokens[2].getStr()), tokens[3]);
+    }
+    else if (tokens[0] == "insert")
+    {
+        insert(tokens);
     }
     else if (tokens[0] == "count")
     {
