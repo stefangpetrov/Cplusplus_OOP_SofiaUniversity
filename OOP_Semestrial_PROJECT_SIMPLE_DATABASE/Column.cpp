@@ -43,7 +43,7 @@ void Column::setType(String type)
 	
 }
 
-const Cell Column::operator[](size_t i)
+Cell& Column::operator[](size_t i)
 {
 	return f_column[i];
 }

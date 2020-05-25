@@ -129,6 +129,7 @@ String ConsoleHandler::getStringValue(String str)
                 {
                     result += "\"";
                 }
+                i--;
             }
         }
     }
@@ -639,6 +640,131 @@ void ConsoleHandler::describe(String tableName)
 
 }
 
+void ConsoleHandler::addColumn(String tableName, String columnName, String columnType)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            bool isThereACol = false;
+            for (size_t j = 0; j < f_dataBase[i].getLength(); j++)
+            {
+                if (f_dataBase[i][j].getHeader() == columnName)
+                {
+                    isThereACol = true;
+                }
+            }
+
+            if (isThereACol)
+            {
+                cout << "There is already a column with such a header" << endl;
+                return;
+            }
+
+            if (columnType == "string" || columnType == "double" || columnType == "int")
+            {
+                Column newCol;
+                newCol.setHeader(columnName);
+                newCol.setType(columnType);
+
+                for (size_t i = 0; i < f_dataBase[0].getLength(); i++)
+                {
+                    String empty;
+                    Cell newCell(columnType, empty);
+                    newCol.addCell(newCell);
+                }
+                f_dataBase[i].addColumn(newCol);
+                f_dataBase[i].takeBiggestColumnSizes();
+            }
+            else
+            {
+                cout << "Invalid type" << endl;
+                return;
+            }
+        }
+    }
+
+    
+}
+
+void ConsoleHandler::update(String tableName, int searchCol, String searchValue, int targetCol, String targetValue)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            if (searchCol - 1 >= f_dataBase[i].getLength() || searchCol - 1 < 0 || targetCol - 1 >= f_dataBase[i].getLength() || targetCol - 1 < 0)
+            {
+                cout << "Invalid search or target column values!" << endl;
+                return;
+            }
+
+            for (size_t j = 0; j < f_dataBase[i][searchCol - 1].getLength(); j++)
+            {
+                String current = f_dataBase[i][searchCol - 1][j].getValue();
+                if (current == searchValue)
+                {
+                    String colType = f_dataBase[i][targetCol - 1].getType();
+                    if (colType == "string")
+                    {
+                        String str = "string";
+                        String value = "NULL";
+                        if (targetValue[0] != '\"' || targetValue[targetValue.getLength() - 1] != '\"')
+                        {
+                            Cell copyCell(str, value);
+                            f_dataBase[i][targetCol - 1][j] = copyCell;
+                        }
+                        else
+                        {
+                            String newVal;
+                            for (size_t k = 1; k < targetValue.getLength() - 1; k++)
+                            {
+                                newVal += targetValue[k];
+                            }
+                            Cell copyCell(str, newVal);
+                            f_dataBase[i][targetCol - 1][j] = copyCell;
+
+                        }
+                    }
+                    else if (colType == "int")
+                    {
+                        Cell copyCell(colType, targetValue);
+
+                        f_dataBase[i][targetCol - 1][j] = copyCell;
+                    }
+                    else if (colType == "double")
+                    {
+                        Cell copyCell(colType, targetValue);
+
+                        f_dataBase[i][targetCol - 1][j] = copyCell;
+                    }
+                    else
+                    {
+                        cout << "No such type can be integrated in the database!" << endl;
+                        return;
+
+                    }
+
+                    f_dataBase[i].takeBiggestColumnSizes();
+                }
+            }
+        }
+    }
+    
+}
+
 
 void ConsoleHandler::handleCommand(String command)
 {
@@ -715,6 +841,14 @@ void ConsoleHandler::handleCommand(String command)
     else if (tokens[0] == "describe")
     {
         describe(tokens[1]);
+    }
+    else if (tokens[0] == "addColumn")
+    {
+        addColumn(tokens[1], tokens[2], tokens[3]);
+    }
+    else if (tokens[0] == "update")
+    {
+        update(tokens[1], atoi(tokens[2].getStr()), tokens[3], atoi(tokens[4].getStr()), tokens[5]);
     }
     else if (tokens[0] == "count")
     {

@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-    ConsoleHandler handler;
+   ConsoleHandler handler;
 
     cout << "Type help to see all the available commands!" << endl;
 
@@ -39,6 +39,7 @@ int main() {
         else
             cout << "Invalid command!. Try again." << endl;
     }
+    
 
     return 0;
 }

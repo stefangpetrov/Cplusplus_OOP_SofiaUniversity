@@ -19,6 +19,8 @@ public:
 
 	const String getType() const;
 	void setType(String type);
-	const Cell operator[](size_t i);
+	Cell& operator[](size_t i);
+
+	
 };
 

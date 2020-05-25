@@ -56,8 +56,8 @@ void Table::takeBiggestColumnSizes()
 
 	for (size_t i = 0; i < f_table.length(); i++)
 	{
-		
-		f_columnSizes.to_end(f_table[i].getHeader().getLength());
+		if(i == f_columnSizes.length())
+			f_columnSizes.to_end(f_table[i].getHeader().getLength());
 		
 		
 	}

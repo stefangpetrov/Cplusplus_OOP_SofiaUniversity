@@ -13,31 +13,51 @@ Cell::Cell(String type, String value)
 
     if (type == "int")
     {
-        if (value.isIntString())
+        if (value == "")
         {
-            int intVal = atoi(value.getStr());
-
+            int intVal = 0;
+            value = "NULL";
             this->setNewVal(type, value, intVal);
         }
         else
         {
-            value = "NULL";
-            this->setNewVal(type, value, 0);
+            if (value.isIntString())
+            {
+                int intVal = atoi(value.getStr());
+
+                this->setNewVal(type, value, intVal);
+            }
+            else
+            {
+                value = "NULL";
+                this->setNewVal(type, value, 0);
+            }
+          
         }
     }
     else if (type == "double")
     {
-        if (value.isDoubleString())
+        if (value == "")
         {
-            double dobVal = strtod(value.getStr(), NULL);
-
+            int dobVal = 0;
+            value = "NULL";
             this->setNewVal(type, value, dobVal);
         }
         else
         {
-            value = "NULL";
-            this->setNewVal(type, value, 0.00);
+            if (value.isDoubleString())
+            {
+                double dobVal = strtod(value.getStr(), NULL);
+
+                this->setNewVal(type, value, dobVal);
+            }
+            else
+            {
+                value = "NULL";
+                this->setNewVal(type, value, 0.00);
+            }
         }
+        
         
     }
     else if(type == "string")

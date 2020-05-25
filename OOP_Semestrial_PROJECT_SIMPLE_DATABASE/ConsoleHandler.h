@@ -42,6 +42,10 @@ private:
 	void select(int col, String value, String tableName);
 
 	void describe(String tableName);
+
+	void addColumn(String tableName, String columnName, String columnType);
+
+	void update(String tableName, int searchCol, String searchValue, int targetCol, String targetValue);
 public:
 
 
