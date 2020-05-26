@@ -106,6 +106,248 @@ const String Cell::getValue() const
     return f_value;
 }
 
+void Cell::operate(String operation, Cell other)
+{
+    if (operation == "minimum")
+    {
+        
+        if (f_type == "double")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            if (f_doubleValue > otherValue)
+            {
+                
+                f_doubleValue = otherValue;
+
+
+                ofstream dobVal;
+                dobVal.open("ConvertNumberToString.txt");
+                dobVal << f_doubleValue;
+
+                dobVal.close();
+
+                char c;
+                ifstream dobString;
+                dobString.open("ConvertNumberToString.txt");
+                
+                f_value = "";
+                while (dobString.get(c))
+                {
+
+                    f_value += c;
+                }
+                dobString.close();
+                
+
+            }
+            
+        }
+        else if (f_type == "int")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            if (f_intValue > otherValue)
+            {
+
+                f_intValue = otherValue;
+
+
+                ofstream dobVal;
+                dobVal.open("ConvertNumberToString.txt");
+                dobVal << f_intValue;
+
+                dobVal.close();
+
+                char c;
+                ifstream dobString;
+                dobString.open("ConvertNumberToString.txt");
+
+                f_value = "";
+                while (dobString.get(c))
+                {
+
+                    f_value += c;
+                }
+                dobString.close();
+
+
+            }
+        }
+    }
+    else if (operation == "maximum")
+    {
+
+        if (f_type == "double")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            if (f_doubleValue < otherValue)
+            {
+
+                f_doubleValue = otherValue;
+
+
+                ofstream dobVal;
+                dobVal.open("ConvertNumberToString.txt");
+                dobVal << f_doubleValue;
+
+                dobVal.close();
+
+                char c;
+                ifstream dobString;
+                dobString.open("ConvertNumberToString.txt");
+
+                f_value = "";
+                while (dobString.get(c))
+                {
+
+                    f_value += c;
+                }
+                dobString.close();
+
+
+            }
+
+        }
+        else if (f_type == "int")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            if (f_intValue < otherValue)
+            {
+
+                f_intValue = otherValue;
+
+
+                ofstream dobVal;
+                dobVal.open("ConvertNumberToString.txt");
+                dobVal << f_intValue;
+
+                dobVal.close();
+
+                char c;
+                ifstream dobString;
+                dobString.open("ConvertNumberToString.txt");
+
+                f_value = "";
+                while (dobString.get(c))
+                {
+
+                    f_value += c;
+                }
+                dobString.close();
+
+
+            }
+        }
+    }
+    else if (operation == "sum")
+    {
+
+        if (f_type == "double")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            f_doubleValue = f_doubleValue + otherValue;
+
+
+            ofstream dobVal;
+            dobVal.open("ConvertNumberToString.txt");
+            dobVal << f_doubleValue;
+
+            dobVal.close();
+
+            char c;
+            ifstream dobString;
+            dobString.open("ConvertNumberToString.txt");
+
+            f_value = "";
+            while (dobString.get(c))
+            {
+
+                f_value += c;
+            }
+            dobString.close();
+
+        }
+        else if (f_type == "int")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            f_intValue = f_intValue + otherValue;
+
+
+            ofstream dobVal;
+            dobVal.open("ConvertNumberToString.txt");
+            dobVal << f_intValue;
+
+            dobVal.close();
+
+            char c;
+            ifstream dobString;
+            dobString.open("ConvertNumberToString.txt");
+
+            f_value = "";
+            while (dobString.get(c))
+            {
+
+                f_value += c;
+            }
+            dobString.close();
+        }
+    }
+    else if (operation == "product")
+    {
+
+        if (f_type == "double")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            f_doubleValue = f_doubleValue * otherValue;
+
+
+            ofstream dobVal;
+            dobVal.open("ConvertNumberToString.txt");
+            dobVal << f_doubleValue;
+
+            dobVal.close();
+
+            char c;
+            ifstream dobString;
+            dobString.open("ConvertNumberToString.txt");
+
+            f_value = "";
+            while (dobString.get(c))
+            {
+
+                f_value += c;
+            }
+            dobString.close();
+
+        }
+        else if (f_type == "int")
+        {
+            double otherValue = strtod(other.f_value.getStr(), NULL);
+            f_intValue = f_intValue * otherValue;
+
+
+            ofstream dobVal;
+            dobVal.open("ConvertNumberToString.txt");
+            dobVal << f_intValue;
+
+            dobVal.close();
+
+            char c;
+            ifstream dobString;
+            dobString.open("ConvertNumberToString.txt");
+
+            f_value = "";
+            while (dobString.get(c))
+            {
+
+                f_value += c;
+            }
+            dobString.close();
+        }
+    }
+    
+
+}
+
 
 
 ostream& operator<<(ostream& out, const Cell& cell)

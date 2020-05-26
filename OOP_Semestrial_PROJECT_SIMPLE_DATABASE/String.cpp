@@ -190,6 +190,11 @@ bool String::operator!=(const String& other)
     return strcmp(this->str, other.str) != 0;
 }
 
+bool String::operator!=(const char* other)
+{
+    return strcmp(this->str, other) != 0;
+}
+
 bool String::operator==(const String& other)
 {
     return strcmp(this->str, other.str) == 0;
@@ -250,6 +255,24 @@ bool String::isDoubleString()
 {
     char* copy = nullptr;
     char* tok = nullptr;
+    bool noDot = true;
+    for (size_t i = 0; i < strlen(str); i++)
+    {
+        if (str[i] == '.')
+        {
+            noDot = false;
+        }
+    }
+
+    if (noDot)
+    {
+        if (isIntString())
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     if (this->str[0] == '+' || this->str[0] == '-')
     {

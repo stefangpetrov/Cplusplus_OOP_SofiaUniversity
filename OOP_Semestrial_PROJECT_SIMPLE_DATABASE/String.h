@@ -36,6 +36,8 @@ public:
     char operator[](const int index) const;
 
     bool operator!=(const String& other);
+    bool operator!=(const char* other);
+
     bool operator==(const String& other);
     bool operator==(const char* other);
     bool operator<(const String& other);

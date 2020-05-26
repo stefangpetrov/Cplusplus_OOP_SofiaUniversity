@@ -871,6 +871,55 @@ void ConsoleHandler::insert(Vector<String> tokens)
     
 }
 
+void ConsoleHandler::aggregate(String tableName, int searchCol, String searchValue, int targetCol, String operation)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    if (operation != "minimum" && operation != "maximum" && operation != "sum" && operation != "product")
+    {
+        cout << "Invalid operation!" << endl;
+        return;
+    }
+
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            if (searchCol - 1 >= f_dataBase[i].getLength() || searchCol - 1 < 0 || targetCol - 1 >= f_dataBase[i].getLength() || targetCol - 1 < 0)
+            {
+                cout << "Invalid search or target column values!" << endl;
+                return;
+            }
+
+            String searchColType = f_dataBase[i][searchCol - 1].getType();
+            String targetColType = f_dataBase[i][targetCol - 1].getType();
+
+            if (searchColType != "double" && searchColType != "int" && targetColType != "double" && targetColType != "int")
+            {
+                cout << "Column types are not double or int" << endl;
+                return;
+            }
+
+            for (size_t j = 0; j < f_dataBase[i][searchCol - 1].getLength(); j++)
+            {
+                String current = f_dataBase[i][searchCol - 1][j].getValue();
+
+                if (current == searchValue)
+                {
+                    f_dataBase[i][targetCol - 1][j].operate(operation, f_dataBase[i][searchCol - 1][j]);
+                    
+                }
+            }
+
+            f_dataBase[i].takeBiggestColumnSizes();
+        }
+    }
+}
+
 
 void ConsoleHandler::handleCommand(String command)
 {
@@ -963,6 +1012,10 @@ void ConsoleHandler::handleCommand(String command)
     else if (tokens[0] == "insert")
     {
         insert(tokens);
+    }
+    else if (tokens[0] == "aggregate")
+    {
+        aggregate(tokens[1], atoi(tokens[2].getStr()), tokens[3], atoi(tokens[4].getStr()), tokens[5]);
     }
     else if (tokens[0] == "count")
     {

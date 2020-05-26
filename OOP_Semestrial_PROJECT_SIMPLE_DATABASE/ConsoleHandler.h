@@ -50,6 +50,8 @@ private:
 	void deleteRows(String tableName, int searchCol, String searchValue);
 
 	void insert(Vector<String> tokens);
+
+	void aggregate(String tableName, int searchCol, String searchValue, int targetCol, String operation);
 public:
 
 

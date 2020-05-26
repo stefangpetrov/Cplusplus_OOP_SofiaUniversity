@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <fstream>
 #include "String.h"
+#include <cmath>
 
 using namespace std;
 
@@ -33,5 +34,6 @@ public:
 
 	const String getValue() const;
 
+	void operate(String operation, Cell other);
 
 };
