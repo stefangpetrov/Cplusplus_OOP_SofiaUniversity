@@ -1,27 +1,20 @@
 #pragma once
-#include "DataBase.h"
+#include "Table.h"
 
-
-
-class ConsoleHandler
+class DataBase
 {
 private:
-	fstream f_inout;
-	String f_fileName;
-	String f_filePath;
-	DataBase f_dataBase;
-
-	void open(String path);
-	void save();
-	void saveAs(String path);
-	void close();
-	void exit();
-	void help();
-
+	Vector<Table> f_dataBase;
+	void addTable(Table newTable);
+	bool checkName(String tableName);
+	void splitRowValues(Vector<String>& colTypes, String strRow);
+	void setColumns(Vector<String> cols, Table& table);
+	void getCurrentRow(fstream& newTableData, String& row);
+	String getStringValue(String str);
+public:
+	void importFile(String path);
 
 	void print(String name);
-
-	void importFile(String path);
 
 	void showTables();
 
@@ -47,12 +40,9 @@ private:
 
 	void innerjoin(String tableName, int Col, String tableName2, int Col2);
 
-public:
 
+	const size_t length();
 
-
-
-	void handleCommand(String command);
-
-
+	Table& operator[](int i);
 };
+
