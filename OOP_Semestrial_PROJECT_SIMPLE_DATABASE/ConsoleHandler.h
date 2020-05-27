@@ -52,6 +52,9 @@ private:
 	void insert(Vector<String> tokens);
 
 	void aggregate(String tableName, int searchCol, String searchValue, int targetCol, String operation);
+
+	void innerjoin(String tableName, int Col, String tableName2, int Col2);
+
 public:
 
 

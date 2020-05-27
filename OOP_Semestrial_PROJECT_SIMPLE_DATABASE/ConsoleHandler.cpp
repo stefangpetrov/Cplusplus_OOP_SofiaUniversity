@@ -891,7 +891,7 @@ void ConsoleHandler::aggregate(String tableName, int searchCol, String searchVal
         {
             if (searchCol - 1 >= f_dataBase[i].getLength() || searchCol - 1 < 0 || targetCol - 1 >= f_dataBase[i].getLength() || targetCol - 1 < 0)
             {
-                cout << "Invalid search or target column values!" << endl;
+                cout << "Invalid search or target column numbers!" << endl;
                 return;
             }
 
@@ -916,6 +916,123 @@ void ConsoleHandler::aggregate(String tableName, int searchCol, String searchVal
             }
 
             f_dataBase[i].takeBiggestColumnSizes();
+        }
+    }
+}
+
+void ConsoleHandler::innerjoin(String tableName, int Col, String tableName2, int Col2)
+{
+    if (!f_inout.is_open())
+    {
+        cout << "Try opening a file first!" << endl;
+        return;
+    }
+
+    Table newTable;
+
+    if (tableName == tableName2)
+    {
+        cout << "You cannot innerjoin the same table" << endl;
+        return;
+    }
+
+
+    for (size_t i = 0; i < f_dataBase.length(); i++)
+    {
+        if (tableName == f_dataBase[i].getName())
+        {
+            if (Col - 1 >= f_dataBase[i].getLength() || Col - 1 < 0)
+            {
+                cout << "Invalid first table column number!" << endl;
+                return;
+            }
+
+            for (size_t j = 0; j < f_dataBase.length(); j++)
+            {
+                if (tableName2 == f_dataBase[j].getName())
+                {
+                    if (Col2 - 1 >= f_dataBase[j].getLength() || Col2 - 1 < 0)
+                    {
+                        cout << "Invalid second table column number!" << endl;
+                        return;
+                    }
+
+                    String newTableName = f_dataBase[i].getName();
+                    newTableName += "JOIN";
+                    newTableName += ('0' + Col);
+                    newTableName += ('0' + Col2);
+                    newTableName += f_dataBase[j].getName();
+
+                    newTable.setName(newTableName);
+
+                    String firstTableType = f_dataBase[i][Col - 1].getType();
+                    String secondTableType = f_dataBase[j][Col2 - 1].getType();
+
+                    size_t newTableLength = f_dataBase[i].getLength() + f_dataBase[j].getLength() - 2;
+
+                    for (size_t k = 0; k < f_dataBase[i].getLength(); k++)
+                    {
+                        if (k != Col - 1)
+                        {
+                            Column newCol;
+                            newCol.setHeader(f_dataBase[i][k].getHeader());
+                            newTable.addColumn(newCol);
+                        }
+                    }
+                    for (size_t k = 0; k < f_dataBase[j].getLength(); k++)
+                    {
+                        if (k != Col2 - 1)
+                        {
+                            Column newCol;
+                            newCol.setHeader(f_dataBase[j][k].getHeader());
+                            newTable.addColumn(newCol);
+                        }
+                    }
+
+                    if (firstTableType != secondTableType)
+                    {
+                        newTable.takeBiggestColumnSizes();
+                        f_dataBase.to_end(newTable);
+                        cout << newTable.getName() << endl;
+                        return;
+                    }
+
+                    for (size_t k = 0; k < f_dataBase[i][Col - 1].getLength(); k++)
+                    {
+                        String currentFirst = f_dataBase[i][Col - 1][k].getValue();
+                        for (size_t p = 0; p < f_dataBase[j][Col2 - 1].getLength(); p++)
+                        {
+                            String currentSecond = f_dataBase[j][Col2 - 1][p].getValue();
+
+                            if (currentFirst == currentSecond)
+                            {
+                                size_t newTableIndex = 0;
+                                for (size_t g = 0; g < f_dataBase[i].getLength(); g++)
+                                {
+                                    if (g != Col - 1)
+                                    {
+                                        newTable[newTableIndex].addCell(f_dataBase[i][g][k]);
+                                        newTableIndex++;
+                                    }
+                                }
+                                for (size_t g = 0; g < f_dataBase[j].getLength(); g++)
+                                {
+                                    if (g != Col2 - 1)
+                                    {
+                                        newTable[newTableIndex].addCell(f_dataBase[j][g][p]);
+                                        newTableIndex++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    newTable.takeBiggestColumnSizes();
+                    f_dataBase.to_end(newTable);
+                    cout << newTable.getName() << endl;
+                    return;
+                }
+            }
         }
     }
 }
@@ -1012,6 +1129,10 @@ void ConsoleHandler::handleCommand(String command)
     else if (tokens[0] == "insert")
     {
         insert(tokens);
+    }
+    else if (tokens[0] == "innerjoin")
+    {
+        innerjoin(tokens[1], atoi(tokens[2].getStr()), tokens[3], atoi(tokens[4].getStr()));
     }
     else if (tokens[0] == "aggregate")
     {
